@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>LeetTutor</title>
+  <link href="/static/css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="background-animation">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <header class="glass">
+    <img src="/static/logo.png" alt="LeetTutor Logo" class="logo-image"/>
+    <!-- if you don't have a logo.png, swap for text: -->
+    <!-- <div class="logo">LeetTutor</div> -->
+  </header>
+
+  <div class="container">
+    <section class="form-panel glass">
+      <div class="row">
+        <div class="field">
+          <label for="problem-id">Problem #</label>
+          <input type="text" id="problem-id" placeholder="e.g. 1"/>
+        </div>
+        <div class="field">
+          <label for="language">Language</label>
+          <select id="language">
+            <option>C++</option><option>Java</option><option>Python</option>
+            <option>Python3</option><option>C</option><option>C#</option>
+            <option>JavaScript</option><option>TypeScript</option><option>PHP</option>
+            <option>Swift</option><option>Kotlin</option><option>Dart</option>
+            <option>Go</option><option>Ruby</option><option>Scala</option>
+            <option>Rust</option><option>Racket</option><option>Erlang</option>
+            <option>Elixir</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="code-editor">Your Solution</label>
+        <textarea id="code-editor" placeholder="// Paste your code…"></textarea>
+      </div>
+      <button id="submit-btn" class="btn">Get AI Feedback</button>
+    </section>
+
+    <section class="feedback-panel glass">
+      <h2>AI Feedback</h2>
+      <div id="feedback-box" class="feedback-box">
+        Your feedback will appear here…
+      </div>
+    </section>
+  </div>
+
+  <footer class="glass">© 2025 LeetTutor</footer>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

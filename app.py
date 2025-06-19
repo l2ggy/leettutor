@@ -1,29 +1,38 @@
 import csv
-from groq import Groq
 import os
+from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
+from groq import Groq
 
 load_dotenv()
+API_KEY = os.getenv("GROQ_KEY")
+if not API_KEY:
+    raise RuntimeError("Set GROQ_KEY in your .env")
 
-file = open('leetcodequestions.csv', 'r')
-reader = csv.reader(file)
-data = list(reader)
-api_key = os.getenv("groq_key")
+# load questions once
+with open("leetcodequestions.csv", newline="") as f:
+    reader = csv.reader(f)
+    QUESTIONS = {row[0]: {"title": row[1], "topics": row[5], "difficulty": row[6]} for row in reader}
 
-if not api_key:
-    raise ValueError("API key not found. Please set the 'groqkey' environment variable.")
+app = Flask(__name__)
 
-question_id = input("Enter the question ID: ")
-programming_language = input("Enter the programming language: ")
-user_solution = input("Enter the user's attempted solution: ")
+@app.route("/")
+def index():
+    return render_template("leettutor.html")
 
-for row in data:
-    if str(row[0]) == question_id:
-        question_name = row[1]
-        question_topics = row[5]
-        question_difficulty = row[6]
+@app.route("/api/feedback", methods=["POST"])
+def feedback():
+    data = request.json
+    qid = data.get("question_id", "").strip()
+    lang = data.get("language", "").strip()
+    code = data.get("solution", "").strip()
 
-messages = [
+    meta = QUESTIONS.get(qid)
+    if not meta:
+        return jsonify({"error": f"Question ID {qid} not found"}), 404
+
+    # build messages
+    messages = [
     {
         "role": "system",
         "content": (
@@ -63,27 +72,24 @@ messages = [
     }
 ]
 
-client = Groq(api_key=api_key)
-completion = client.chat.completions.create(
-    model="qwen/qwen3-32b",
-    messages=messages,
-    temperature=0.6,
-    max_completion_tokens=4096,
-    top_p=0.95,
-    reasoning_effort="default",
-    stream=False,
-    stop=None,
-)
-response = str(completion.choices[0].message.content)
+    client = Groq(api_key=API_KEY)
+    completion = client.chat.completions.create(
+        model="qwen/qwen3-32b",
+        messages=messages,
+        temperature=0.6,
+        max_completion_tokens=4096,
+        top_p=0.95,
+        reasoning_effort="default",
+        stream=False,
+    )
+    resp = completion.choices[0].message.content
 
-start = response.find("<think>")
-end = response.find("</think>")
+    # strip any <think>…</think> tags
+    start, end = resp.find("<think>"), resp.find("</think>")
+    if start != -1 and end != -1:
+        resp = (resp[:start] + resp[end+len("</think>"):]).strip()
 
-if start != -1 and end != -1:
-    think_content = response[start + len("<think>"):end].strip()
-    rest_of_response = (response[:start] + response[end + len("</think>"):]).strip()
-else:
-    think_content = ""
-    rest_of_response = response
+    return jsonify({"feedback": resp})
 
-print(rest_of_response)
+if __name__ == "__main__":
+    app.run(debug=True)
