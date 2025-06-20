@@ -3,13 +3,28 @@ import { json } from '@cloudflare/pages-runtime';
 
 export async function onRequest(context) {
   const { request, env } = context;
+
+  // Always allow CORS preflight
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      }
+    });
+  }
+
   if (request.method !== 'POST') {
-    return new Response(null, { status: 405 });
+    return new Response('Method Not Allowed', {
+      status: 405,
+      headers: { 'Allow': 'POST, OPTIONS' }
+    });
   }
 
   const data = await request.json();
   const { question_id: qid, language: lang, solution: code } = data;
-
   // Lookup your CSV however you like here (or move it to KV)
   // For brevity let's assume you have a QUESTIONS map in KV or import
 
@@ -46,7 +61,13 @@ export async function onRequest(context) {
   const payload = await groqResp.json();
   let feedback = payload.choices[0].message.content;
   // strip <think> tags if needed…
-  feedback = feedback.replace(/<think>.*?<\/think>/gs, '').trim();
+  const result = { feedback };
 
-  return json({ feedback });
+  return new Response(JSON.stringify(result), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
+  });
 }
