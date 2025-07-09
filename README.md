@@ -8,7 +8,7 @@ A Cloudflare Pages project that uses Groq's API to give feedback on LeetCode sub
    ```bash
    npm install
    ```
-2. Set the `GROQ_KEY` environment variable with your Groq API key (via `wrangler.toml` or the Cloudflare dashboard).
+2. Set the `GROQ_KEY` environment variable in the Cloudflare dashboard using your Groq API key. The `wrangler.toml` file no longer defines this variable.
 3. Deploy or test with Wrangler:
    ```bash
    wrangler pages dev
@@ -17,7 +17,7 @@ A Cloudflare Pages project that uses Groq's API to give feedback on LeetCode sub
 ### Cloudflare deployment
 
 1. In the Cloudflare dashboard, create a **Pages** project and connect it to this repository.
-2. In **Settings → Environment Variables**, add `GROQ_KEY` with your Groq API key.
+2. In **Settings → Environment Variables**, add `GROQ_KEY` with your Groq API key. The `wrangler.toml` file no longer defines this variable.
 3. Deploy normally; Pages will automatically detect the `functions/` directory and expose
    the `/api/feedback` endpoint.
 
