@@ -1,5 +1,5 @@
 // functions/api/feedback.js
-import questions from "../leetcodequestions.json" with { type: "json" }
+import questions from "../leetcodequestions.json" assert { type: "json" }
  
 export async function onRequest(context) {
   const { request, env } = context
