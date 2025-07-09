@@ -1,5 +1,10 @@
 // functions/api/feedback.js
-import questions from "../leetcodequestions.json" assert { type: "json" }
+// Import the problem metadata. The Pages bundler (esbuild) will inline this
+// JSON at build time so the object is available when the worker runs.
+// Older Node runtimes used by the Pages bundler expect the legacy `with`
+// assertion syntax for JSON imports. Using this ensures the metadata file
+// is bundled correctly so the questions object is available at runtime.
+import questions from "../leetcodequestions.json" with { type: "json" }
  
 export async function onRequest(context) {
   const { request, env } = context
@@ -142,3 +147,4 @@ Please provide **brief feedback only** on this exact submission. If it is incorr
   return new Response(JSON.stringify({ feedback }), {
     status: 200,
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }  })}
+
