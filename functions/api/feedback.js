@@ -140,5 +140,4 @@ Please provide **brief feedback only** on this exact submission. If it is incorr
 
   return new Response(JSON.stringify({ feedback }), {
     status: 200,
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-  })}
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }  })}

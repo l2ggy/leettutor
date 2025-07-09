@@ -29,5 +29,4 @@ fs.writeFileSync(
   JSON.stringify(data, null, 2),
   'utf8'
 );
-
 console.log('✅ functions/leetcodequestions.json generated.');
