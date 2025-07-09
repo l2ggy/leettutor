@@ -37,7 +37,7 @@ export async function onRequest(context) {
     })
   }
 
-  const qid  = (body.question_id  || '').trim()
+  const qid = String(body.question_id ?? '').trim()
   const lang = (body.language     || '').trim()
   const code = (body.solution     || '').trim()
 
@@ -89,7 +89,7 @@ Please provide **brief feedback only** on this exact submission. If it is incorr
   ]
 
   // Support both Cloudflare Pages `env` and traditional environment variables
-  const apiKey = env.GROQ_KEY || process.env.GROQ_KEY
+  const apiKey = env.GROQ_KEY || (typeof process !== 'undefined' ? process.env?.GROQ_KEY : undefined)
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'GROQ_KEY not configured' }), {
       status: 500,
