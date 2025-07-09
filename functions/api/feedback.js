@@ -95,20 +95,34 @@ Please provide **brief feedback only** on this exact submission. If it is incorr
   }
 
   // Call Groq’s REST API
-  const groqResp = await fetch('https://api.groq.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: 'qwen/qwen3-32b',
-      messages,
-      temperature: 0.6,
-      max_completion_tokens: 4096,
-      top_p: 0.95
+  let groqResp
+  try {
+    groqResp = await fetch('https://api.groq.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'qwen/qwen3-32b',
+        messages,
+        temperature: 0.6,
+        max_completion_tokens: 4096,
+        top_p: 0.95
+      })
     })
-  })
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: `Failed to reach Groq API: ${err.message}` }),
+      {
+        status: 502,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      }
+    )
+  }
 
   if (!groqResp.ok) {
     const text = await groqResp.text()
@@ -127,5 +141,4 @@ Please provide **brief feedback only** on this exact submission. If it is incorr
   return new Response(JSON.stringify({ feedback }), {
     status: 200,
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-  })
-}
+  })}

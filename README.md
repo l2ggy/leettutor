@@ -14,6 +14,13 @@ A Cloudflare Pages project that uses Groq's API to give feedback on LeetCode sub
    wrangler pages dev
    ```
 
+### Cloudflare deployment
+
+1. In the Cloudflare dashboard, create a **Pages** project and connect it to this repository.
+2. In **Settings → Environment Variables**, add `GROQ_KEY` with your Groq API key.
+3. Deploy normally; Pages will automatically detect the `functions/` directory and expose
+   the `/api/feedback` endpoint.
+
 ## Data
 
 `functions/leetcodequestions.json` contains the problem metadata. It was generated once with `node scripts/csv-to-json.js` and normally doesn't need to be regenerated.
