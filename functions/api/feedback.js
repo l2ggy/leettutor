@@ -86,7 +86,8 @@ Please provide **brief feedback only** on this exact submission. If it is incorr
     }
   ]
 
-  const apiKey = env.GROQ_KEY
+  // Support both Cloudflare Pages `env` and traditional environment variables
+  const apiKey = env.GROQ_KEY || process.env.GROQ_KEY
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'GROQ_KEY not configured' }), {
       status: 500,
