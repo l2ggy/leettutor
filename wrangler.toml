@@ -1,0 +1,7 @@
+name = "leettutor"
+compatibility_date = "2024-05-01"
+pages_build_output_dir = "."
+
+[vars]
+# Populate this with your Groq API key or set it in the Cloudflare dashboard
+GROQ_KEY = ""
