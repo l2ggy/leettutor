@@ -23,7 +23,7 @@ A Cloudflare Pages project that uses Groq's API to give feedback on LeetCode sub
 
 ## Data
 
-`functions/leetcodequestions.json` contains the problem metadata. It was generated once with `node scripts/csv-to-json.js` and normally doesn't need to be regenerated.
+`functions/questions.js` contains the problem metadata. It was generated once with `node scripts/csv-to-json.js` and normally doesn't need to be regenerated.
 
 ## API
 

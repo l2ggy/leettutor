@@ -25,8 +25,8 @@ for (const row of rows) {
 
 // 4) Write it into your functions folder
 fs.writeFileSync(
-  'functions/leetcodequestions.json',
-  JSON.stringify(data, null, 2),
+  'functions/questions.js',
+  'export default ' + JSON.stringify(data, null, 2) + ';\n',
   'utf8'
 );
-console.log('✅ functions/leetcodequestions.json generated.');
+console.log('✅ functions/questions.js generated.');
