@@ -74,5 +74,4 @@ document.addEventListener("DOMContentLoaded", () => {
       // Network or unexpected errors
       feedbackBox.textContent = `Network error: ${err.message}. Please check your connection.`;
     }
-  });
-});
+  });});
