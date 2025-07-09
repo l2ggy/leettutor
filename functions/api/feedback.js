@@ -1,7 +1,7 @@
 // functions/api/feedback.js
 // Import the problem metadata. The Pages bundler (esbuild) will inline this
 // JSON at build time so the object is available when the worker runs.
-import questions from "../leetcodequestions.json"
+import questions from "../questions.js"
  
 export async function onRequest(context) {
   const { request, env } = context

@@ -1,4 +1,4 @@
-{
+export default {
   "1": {
     "title": "Two Sum",
     "topics": "Array, Hash Table",
@@ -17943,5 +17943,4 @@
     "title": "Problem Name",
     "topics": "Topics",
     "difficulty": "Difficulty"
-  }
-}
+  }};
