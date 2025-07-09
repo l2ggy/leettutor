@@ -1,66 +1,78 @@
-document.getElementById("submit-btn").addEventListener("click", async () => {
-  const qid  = document.getElementById("problem-id").value.trim();
-  const lang = document.getElementById("language").value;
-  const sol  = document.getElementById("code-editor").value.trim();
+document.addEventListener("DOMContentLoaded", () => {
+  const submitBtn = document.getElementById("submit-btn");
+  const problemInput = document.getElementById("problem-id");
+  const languageSelect = document.getElementById("language");
+  const codeEditor = document.getElementById("code-editor");
+  const feedbackBox = document.getElementById("feedback-box");
 
-  const box = document.getElementById("feedback-box");
-  box.textContent = "";
+  submitBtn.addEventListener("click", async () => {
+    const qid  = problemInput.value.trim();
+    const lang = languageSelect.value;
+    const sol  = codeEditor.value.trim();
 
-  // Basic client-side validation
-  if (!qid) {
-    box.textContent = "Please enter a problem ID.";
-    return;
-  }
-  if (!sol) {
-    box.textContent = "Please paste your solution before submitting.";
-    return;
-  }
+    // Clear previous feedback
+    feedbackBox.textContent = "";
 
-  box.textContent = "Loading feedback…";
+    // Client-side validation
+    if (!qid) {
+      feedbackBox.textContent = "Please enter a problem ID.";
+      return;
+    }
+    if (!sol) {
+      feedbackBox.textContent = "Please paste your solution before submitting.";
+      return;
+    }
 
-  try {
-    const res = await fetch("/api/feedback", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question_id: qid, language: lang, solution: sol })
-    });
+    feedbackBox.textContent = "Loading feedback…";
 
-    // Handle HTTP errors
-    if (!res.ok) {
-      if (res.status === 404) {
-        box.textContent = `Problem ID "${qid}" not found. Please check and try again.`;
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question_id: qid,
+          language: lang,
+          solution: sol
+        })
+      });
+
+      // HTTP error handling
+      if (!res.ok) {
+        if (res.status === 404) {
+          feedbackBox.textContent = `Problem ID "${qid}" not found. Please check and try again.`;
+          return;
+        }
+        if (res.status === 400) {
+          const err = await res.json().catch(() => ({}));
+          feedbackBox.textContent = `Bad request: ${err.error || "Please check your inputs."}`;
+          return;
+        }
+        feedbackBox.textContent = `Server error (${res.status}): ${res.statusText}`;
         return;
       }
-      if (res.status === 400) {
-        const err = await res.json();
-        box.textContent = `Bad request: ${err.error || "Please check your inputs."}`;
+
+      // Parse JSON
+      const data = await res.json();
+
+      // Application-level errors
+      if (data.error) {
+        feedbackBox.textContent = `Error: ${data.error}`;
         return;
       }
-      box.textContent = `Server error (${res.status}): ${res.statusText}`;
-      return;
+
+      // Empty feedback
+      const fb = (data.feedback || "").trim();
+      if (!fb) {
+        feedbackBox.textContent = "No feedback returned from server. Try again later.";
+        return;
+      }
+
+      // Success
+      feedbackBox.textContent = fb;
+
+    } catch (err) {
+      // Network or unexpected errors
+      feedbackBox.textContent = `Network error: ${err.message}. Please check your connection.`;
     }
-
-    // Parse JSON
-    const data = await res.json();
-
-    // Handle application-level errors
-    if (data.error) {
-      box.textContent = `Error: ${data.error}`;
-      return;
-    }
-
-    // Handle empty feedback
-    const fb = (data.feedback || "").trim();
-    if (!fb) {
-      box.textContent = "No feedback returned from server. Try again later.";
-      return;
-    }
-
-    // Success!
-    box.textContent = fb;
-
-  } catch (err) {
-    // Network or unexpected errors
-    box.textContent = `Network error: ${err.message}. Please check your connection.`;
-  }
+  });
 });
