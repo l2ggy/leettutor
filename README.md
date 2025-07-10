@@ -4,14 +4,16 @@ A Cloudflare Pages project that uses Groq's API to give feedback on LeetCode sub
 
 ## Setup
 
+Requires **Node.js 18** or later.
+
 1. Install dependencies:
    ```bash
    npm install
    ```
 2. Set the `GROQ_KEY` environment variable with your Groq API key (via `wrangler.toml` or the Cloudflare dashboard). When testing locally with `wrangler pages dev`, run `wrangler secret put GROQ_KEY` so the function can access the key.
-3. Deploy or test with Wrangler:
+3. Start the local development server:
    ```bash
-   wrangler pages dev
+   npm run dev
    ```
 
 ### Cloudflare deployment

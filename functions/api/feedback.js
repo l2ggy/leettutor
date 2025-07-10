@@ -1,3 +1,5 @@
+import questions from '../questions.js';
+
 export async function onRequest({ request, env }) {
   // Handle CORS preflight
   if (request.method === 'OPTIONS') {
@@ -45,8 +47,7 @@ export async function onRequest({ request, env }) {
     });
   }
 
-  // Load problem metadata from the generated JSON module
-  const { default: questions } = await import('../questions.js');
+  // Look up metadata for the requested problem
   const meta = questions[qid];
 
   if (!meta) {
