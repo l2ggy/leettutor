@@ -35,6 +35,9 @@ textarea {
   font-family: monospace;
   padding: 0.5rem;
   border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: rgba(255, 235, 205, 0.05);
+  color: blanchedalmond;
 }
 
 button {
@@ -46,7 +49,7 @@ button {
 pre {
   margin-top: 2rem;
   padding: 1rem;
-  background: #f7f7f7;
+  background: rgba(255, 235, 205, 0.05);
   border: 1px solid #ddd;
   white-space: pre-wrap;
 }
