@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeetTutor (Minimal)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>LeetTutor</h1>
+
+    <form id="review-form">
+      <label>
+        Problem&nbsp;ID
+        <input type="number" id="questionId" required />
+      </label>
+
+      <label>
+        Language
+        <input type="text" id="language" value="Python" required />
+      </label>
+
+      <label>
+        Your&nbsp;code
+        <textarea id="userCode" rows="10" required></textarea>
+      </label>
+
+      <button type="submit">Get&nbsp;feedback</button>
+    </form>
+
+    <pre id="output" hidden></pre>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>

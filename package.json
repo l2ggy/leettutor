@@ -1,0 +1,16 @@
+{
+  "name": "minimallt",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "lite-server --baseDir=."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
