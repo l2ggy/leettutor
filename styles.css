@@ -1,9 +1,11 @@
 body {
-  font-family: system-ui, sans-serif;
+  font-family: sans-serif;
   margin: 0;
   padding: 2rem;
   display: flex;
   justify-content: center;
+  background-color: rgb(26, 26, 26);
+  color: blanchedalmond;
 }
 
 main {
@@ -47,4 +49,11 @@ pre {
   background: #f7f7f7;
   border: 1px solid #ddd;
   white-space: pre-wrap;
+}
+div {
+  margin: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  justify-content: center;
+  background-color: rgba(255, 235, 205, 0.1);
 }
