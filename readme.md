@@ -18,15 +18,7 @@ The project integrates with the Groq API to query the Qwen-32B language model an
 
 ## Screenshot
 
-*You can include a screenshot here to demonstrate the interface:*
-
-```
-📷 screenshots/demo.png
-```
-
-```markdown
 ![Screenshot](screenshots/demo.png)
-```
 
 ---
 
