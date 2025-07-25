@@ -1,4 +1,4 @@
-# LeetTutor (Minimal Version)
+# LeetTutor
 
 **LeetTutor** is a lightweight client-side web application that uses large language models to review user-submitted LeetCode solutions. It provides concise, code-focused feedback without solving the problem itself. The application is implemented entirely in HTML, CSS, and vanilla JavaScript, with no frameworks or build tooling.
 
@@ -27,8 +27,8 @@ The project integrates with the Groq API to query the Qwen-32B language model an
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-user/leettutor-minimal.git
-cd leettutor-minimal
+git clone https://github.com/l1ggy/leettutor.git
+cd leettutor
 npm install
 ```
 
