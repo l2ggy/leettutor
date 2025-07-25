@@ -27,7 +27,7 @@ The project integrates with the Groq API to query the Qwen-32B language model an
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/l1ggy/leettutor.git
+git clone https://github.com/l2ggy/leettutor.git
 cd leettutor
 npm install
 ```
