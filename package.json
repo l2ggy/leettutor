@@ -6,8 +6,8 @@
     "lite-server": "^2.6.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "lite-server --baseDir=."
+    "dev": "wrangler pages dev",
+    "deploy": "wrangler pages deploy"
   },
   "keywords": [],
   "author": "",
