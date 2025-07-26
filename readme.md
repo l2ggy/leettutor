@@ -1,72 +1,81 @@
 # LeetTutor
 
-**LeetTutor** is a lightweight client-side web application that uses large language models to review user-submitted LeetCode solutions. It provides concise, code-focused feedback without solving the problem itself. The application is implemented entirely in HTML, CSS, and vanilla JavaScript, with no frameworks or build tooling.
-
-The project integrates with the Groq API to query the Qwen-32B language model and includes a local `leetcode.json` file containing problem metadata.
+**LeetTutor** is a minimal web utility that leverages large-language-model feedback to review LeetCode solutions.  
+It is built with plain **HTML / CSS / JavaScript** on the front-end and a single **Cloudflare Pages Function** on the back-end, keeping the Groq API key secure in Cloudflare environment variables.
 
 ---
 
 ## Features
-
-- AI-generated code feedback using [Groq’s](https://groq.com/) `qwen/qwen3-32b` model  
-- Local problem metadata file (`leetcode.json`) containing titles, topics, and difficulty  
-- No server-side backend required — fully static and self-contained  
-- Optional `.env.local` integration for managing sensitive API keys  
-- Runs locally via [`lite-server`](https://github.com/johnpapa/lite-server) or a minimal Express server
+- **Instant AI code review** &nbsp;—&nbsp; powered by Groq’s `qwen/qwen3-32b` chat model  
+- **Zero framework** front-end (no React, no bundlers)  
+- **Serverless proxy** stores the Groq key safely; the browser never sees it  
+- **Local JSON catalogue** (`leetcode.json`) with titles, topics and difficulty for rapid prompt construction  
+- **One-command dev / deploy** via Wrangler and Cloudflare Pages  
 
 ---
 
 ## Screenshot
 
-![Screenshot](screenshots/demo.png)
+![Screenshot of LeetTutor](screenshots/demo.png)
 
 ---
 
 ## Getting Started
 
-### 1. Clone the repository
+### Prerequisites
+* **Node ≥ 18**  
+* **Wrangler CLI**  
+  ```bash
+  npm install -g wrangler
+  ```
+
+### 1&nbsp;·&nbsp;Clone & install
 
 ```bash
 git clone https://github.com/l2ggy/leettutor.git
 cd leettutor
-npm install
+npm install    # installs wrangler if you keep it in package.json
 ```
 
-### 2. Add your Groq API key
-
-Create a `.env.local` file in the project root:
+### 2&nbsp;·&nbsp;Add your Groq key locally  
+Create `.dev.vars` (ignored by git):
 
 ```dotenv
-GROQ_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+GROQ_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-> Note: In this minimal version, the API key is still sent to the browser and is visible to users. Do not expose this version publicly without securing the key via a backend proxy.
+### 3&nbsp;·&nbsp;Run the dev server
+
+```bash
+wrangler pages dev            # or: npm run dev
+# opens http://localhost:8787
+```
+
+*(If you encounter a GLIBC error on older distros, install `wrangler@3` or use a newer container. Wrangler 3’s Miniflare works on Ubuntu 20.04.)*
 
 ---
 
-### 3. Start the development server
+## Deployment to Cloudflare Pages
 
-To run using the included Express server:
-
-```bash
-npm run dev
-```
-
-This starts the app at:
-
-```
-http://localhost:3000
-```
+1. Push the repo to GitHub and create a **Pages** project.  
+2. In **Pages → Settings → Environment Variables** add  
+   ```
+   GROQ_API_KEY = sk-xxxxxxxxxxxx
+   ```  
+3. Build command → **N/A** (Pages detects Wrangler automatically).  
+4. Press **Deploy** — your static site and `/api/review` Function go live.
 
 ---
 
 ## How It Works
 
-1. The user selects a LeetCode problem by its ID and submits a solution.
-2. The app retrieves metadata from the local `leetcode.json` file.
-3. A structured prompt is constructed and sent to Groq’s `chat/completions` endpoint.
-4. The model responds with brief, rule-compliant feedback.
-5. The response is displayed below the form.
+1. **Browser** loads `index.html`, user chooses a problem ID and pastes code.  
+2. `main.js` POSTs the data to `/api/review`.  
+3. **Pages Function** (`functions/api/review.js`)  
+   - reads metadata from `/public/leetcode.json`  
+   - injects `env.GROQ_API_KEY` into a request to Groq  
+   - sanitises `<think>` blocks and returns JSON `{ feedback }`  
+4. Browser displays the feedback.
 
 ---
 
@@ -74,43 +83,40 @@ http://localhost:3000
 
 ```
 .
-├── index.html         # Main UI structure
-├── styles.css         # Minimal styling
-├── main.js            # App logic and Groq API integration
-├── leetcode.json      # Problem metadata
-├── .env.local         # Environment variables (ignored by git)
-├── server.js          # Express-based development server (optional)
-└── screenshots/       # Optional folder for UI screenshots
+├── public/
+│   ├── index.html      # UI
+│   ├── styles.css
+│   ├── main.js
+│   └── leetcode.json   # metadata
+├── functions/
+│   └── api/
+│       └── review.js   # serverless proxy
+├── screenshots/        # README images
+├── wrangler.toml       # Cloudflare config
+├── .dev.vars           # local secrets (git-ignored)
+└── .gitignore
 ```
 
 ---
 
 ## Dependencies
 
-- [Groq API](https://console.groq.com/)
-- [lite-server](https://github.com/johnpapa/lite-server) *(optional)*
-- [dotenv](https://www.npmjs.com/package/dotenv) *(used in `server.js`)*
-- [Express](https://expressjs.com/) *(used in `server.js`)*
+| Runtime | Purpose |
+|---------|---------|
+| **Wrangler 4** | Dev server & Pages deploy |
+| **Groq API**   | LLM inference |
+
+No other libraries or frameworks are required.
 
 ---
 
-## Limitations
-
-- The Groq API key is exposed in the client; this is not suitable for production.
-- No persistent storage or backend validation.
-- Response formatting is minimal and lacks syntax highlighting or rich UI.
-
----
-
-## Potential Improvements
-
-- Proxy API requests through a secure backend (e.g., Vercel, Netlify functions)
-- Add syntax highlighting (e.g., Prism or Monaco)
-- Improve feedback presentation and user input validation
-- Add usage quotas or token limits
+## Future Improvements
+- Streaming token-by-token responses for faster UX  
+- Syntax-highlighted code editor (Monaco / CodeMirror)  
+- Rate-limiting or basic auth to prevent key abuse  
+- Per-user submission history backed by D1 / KV  
 
 ---
 
 ## License
-
-This project is open source and available under the MIT License.
+Licensed under the **MIT License** – see [`LICENSE`](LICENSE).
